@@ -43,9 +43,15 @@ element)
 -  Do you find documents which cannot be parsed because of well-formedness errors?
 -  Do you find broken pointers which cannot be resolved?
 
-## Explanation of approach and solution
-First of all, I chose this task because it seemed to align more with my skills and interests than task 1.
-My approach makes the basic assumption that the task requires **one** report to be created for **all** the xml files in https://github.com/wibarab/featuredb/tree/main/010_manannot/features. Based on the prerequisite
->Prerequisite: a programming language able to parse XML and aggregate values. Preferably XSLT or
-XQuery, but Python or Javascript are fine as well.
+## Explanation of Approach and Solution
 
+First, I chose this task because it aligns more with my skills and interests than Task 1. The prerequisites mention:
+>Prerequisite: a programming language able to parse XML and aggregate values. Preferably XSLT or XQuery, but Python or Javascript are fine as well.
+
+Given this, I opted for XSLT, supplemented by Python. Some operations were more straightforward with Python or just not doable using only XSLT. Moreover, I needed a mechanism to run the XSLT.
+
+Accessing the `featuredb` repository directly might hit the GitHub rate limit, so my approach starts by cloning it, unless it's already downloaded.
+
+I made a basic assumption that the task requires **one** report for **all** XML files in [this repository](https://github.com/wibarab/featuredb/tree/main/010_manannot/features). In the beginning, I weighed two approaches: merge all XMLs and then process, or transform each XML individually and compile the results. Given that the combined XML size was manageable, the merge-and-process method seemed more efficient and straightforward.
+
+When it came to choosing the XML and XSLT processor, I initially gravitated towards the lxml Python library. But since I intended to use `<xsl:for-each-group>` available in XSLT version 2.0, and lxml only supports 1.0, I chose the saxonche library despite being less familiar with it.
