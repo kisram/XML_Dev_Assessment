@@ -55,3 +55,7 @@ Accessing the `featuredb` repository directly might hit the GitHub rate limit, s
 I made a basic assumption that the task requires **one** report for **all** XML files in [this repository](https://github.com/wibarab/featuredb/tree/main/010_manannot/features). In the beginning, I weighed two approaches: merge all XMLs and then process, or transform each XML individually and compile the results. Given that the combined XML size was manageable, the merge-and-process method seemed more efficient and straightforward.
 
 When it came to choosing the XML and XSLT processor, I initially gravitated towards the lxml Python library. But since I intended to use `<xsl:for-each-group>` available in XSLT version 2.0, and lxml only supports 1.0, I chose the saxonche library despite being less familiar with it.
+
+After cloning the repository, every XML file in the directory is parsed. Any XML not well-formed triggers an error message. Successfully parsed XMLs are then merged into a single file. During this, I remove individual XML declarations, adding one global declaration instead. The content of each file is put in an element, labeled with its filename. This is done so I can later identify in which file a broken pointer was found.
+
+Once aggregated, the combined XML file is transformed using the XSLT stylesheet. My goal was a straightforward XML report using some custom element names, emphasizing readability. Each sub-task had its designated element (except for 5., that sub-task was achieved in the Python script).
