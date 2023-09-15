@@ -86,8 +86,7 @@
                         <xsl:variable name="refWithoutPrefix" select="replace(current-grouping-key(), '^geo:', '')"/>
                         <!-- Check if the reference exists in the geodata external file -->
                         <xsl:if test="not($geoData//tei:place[@xml:id=$refWithoutPrefix])">
-                            <pointer>
-                                <xsl:value-of select="current-grouping-key()"/>
+                            <pointer xml:id="{current-grouping-key()}">
                                 <!-- Report the IDs of XML files containing the broken reference -->
                                 <xsl:for-each select="distinct-values(current-group()/ancestor::XMLfile/@id)">
                                     <sourceFile xml:id="{.}" />
@@ -104,8 +103,7 @@
                         <xsl:variable name="correspWithoutPrefix" select="replace(current-grouping-key(), '^zot:', '')"/>
                         <!-- Check if the reference exists in the biblioData external file -->
                         <xsl:if test="not($biblioData//tei:biblStruct[@xml:id=$correspWithoutPrefix])">
-                            <pointer>
-                                <xsl:value-of select="current-grouping-key()"/>
+                            <pointer xml:id="{current-grouping-key()}">
                                 <!-- Report the IDs of XML files containing the broken reference -->
                                 <xsl:for-each select="distinct-values(current-group()/ancestor::XMLfile/@id)">
                                     <sourceFile xml:id="{.}" />
@@ -120,13 +118,12 @@
                         <xsl:variable name="correspWithoutPrefix" select="replace(current-grouping-key(), '^src:', '')"/>
                         <!-- Check if the reference exists in the sourceData external file -->
                         <xsl:if test="not($sourceData//tei:event[@xml:id=$correspWithoutPrefix])">
-                            <brokenBiblRef>
-                                <xsl:value-of select="current-grouping-key()"/>
+                            <pointer xml:id="{current-grouping-key()}">
                                 <!-- Report the IDs of XML files containing the broken reference -->
                                 <xsl:for-each select="distinct-values(current-group()/ancestor::XMLfile/@id)">
                                     <sourceFile xml:id="{.}" />
                                 </xsl:for-each>
-                            </brokenBiblRef>
+                            </pointer >
                         </xsl:if>
                     </xsl:for-each-group>
                 </brokenBiblRefs>
@@ -138,8 +135,7 @@
                         <xsl:variable name="respWithoutPrefix" select="replace(current-grouping-key(), '^dmp:', '')"/>
                         <!-- Check if the reference exists in the dmpData external file -->
                         <xsl:if test="not($dmpData//tei:person[@xml:id=$respWithoutPrefix])">
-                            <pointer>
-                                <xsl:value-of select="current-grouping-key()"/>
+                            <pointer xml:id="{current-grouping-key()}">
                                 <!-- Report the IDs of XML files containing the broken reference -->
                                 <xsl:for-each select="current-group()">
                                     <sourceFile>
@@ -159,8 +155,7 @@
 
                         <!-- Check if the reference exists in the personGroupData external file -->
                         <xsl:if test="not($personGroupData//tei:personGrp[@xml:id=$correspWithoutPrefix])">
-                            <pointer>
-                                <xsl:value-of select="current-grouping-key()"/>
+                            <pointer xml:id="{current-grouping-key()}">
                                 <!-- Report the IDs of XML files containing the broken reference, ensure each file is reported only once and is sorted -->
                                 <xsl:for-each select="distinct-values(current-group()/ancestor::XMLfile/@id)">
                                     <xsl:sort select="." order="ascending"/>
@@ -182,8 +177,7 @@
                         
                         <!-- Check if the referenced XML exists -->
                         <xsl:if test="not(unparsed-text-available($finalPath))">
-                            <pointer>
-                                <xsl:value-of select="current-grouping-key()"/>
+                            <pointer xml:id="{current-grouping-key()}">
                                 <!-- Report the IDs of XML files containing the missing XML reference -->
                                 <xsl:for-each select="distinct-values(current-group()/ancestor::XMLfile/@id)">
                                     <sourceFile xml:id="{.}" />
