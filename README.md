@@ -58,4 +58,24 @@ When it came to choosing the XML and XSLT processor, I initially gravitated towa
 
 After cloning the repository, every XML file in the directory is parsed. Any XML not well-formed triggers an error message. Successfully parsed XMLs are then merged into a single file. During this, I remove individual XML declarations, adding one global declaration instead. The content of each file is put in an element, labeled with its filename. This is done so I can later identify in which file a broken pointer was found.
 
-Once aggregated, the combined XML file is transformed using the XSLT stylesheet. My goal was a straightforward XML report using some custom element names, emphasizing readability. Each sub-task had its designated element (except for 5., that sub-task was achieved in the Python script).
+Afterwards, the combined XML file is transformed using the XSLT stylesheet. My goal was a straightforward XML report using some custom element names, emphasizing readability. Each sub-task had its designated element (except for 5., that sub-task was achieved in the Python script).
+
+1. **Index of All Mentioned Places**: 
+   Using `<xsl:for-each-group>`, I group `wib:featureValueObservation` elements by the `@ref` attribute in `tei:placeName`. This ensures unique indexing. The result is under the `<placeIndex>` element, each entry containing the place, in the same format as in the original XML filesa and a list of all wib:featureValueObservationwhere they occur.
+
+2. **Summary of Feature Value Observations by Dialect**:
+   I group `wib:featureValueObservation/tei:lang` elements by their `@corresp` and use the count function. This provides the total number feature value observations for each dialect, listed under the `<observationsByLanguage>` element.
+
+3. **Analysis of Bibliographic Items**:
+   The task only asks for the most-used bibliographic item, but I included counts for each type. I group `tei:bibl` elements based on their type attribute and determine the most-used item using the max function. Results can be found under the <bibliographicItems> section.
+
+4. **Features Associated with Tribes**:
+   I identified features linked to tribes by targeting `wib:featureValueObservation` elements that have a `tei:personGrp` child with a role attribute labeled "tribe". The associated features are listed under the <tribesFeatureList> section in the report.
+
+5. **Identification of Documents Not Well-Formed**:
+   During the XML file processing in the Python script, I use a try-except structure. Parsing each file with Saxon, any ill-formed XML would raise an exception, which is then caught, and the relevant error message, along with the file name, is printed out.
+
+6. **Identification of Broken Pointers**:
+   "Broken pointers which cannot be resolved" was a bit ambiguous, so I started with the things that are part of the report: place names, dialects, person groups, and bibliographic references. Later I also included the references from the @resp attribute of each wib:featureValueObservation element, based on the list of prefixes at the beginning of each document The logic for all of these is similar, I check if the value exists in the external documents they reference. For simplicity, links to external documents are hardcoded. For dialects, I verify if the document in the `<lang>` element's `@corresp` attribute exist. Broken pointers, when found, include references to their source document. Both the list of broken pointers and the list of source files is deduplicated. I noticed some `person group references` prefixed with '#' instead of 'prg:'and considered adjusting the script for this but then thought it would be informative to highlight such inconsistencies.
+
+After the XSLT transformation, I refine the XML report for better readability, ensuring proper indentation and removing unnecessary spaces.
